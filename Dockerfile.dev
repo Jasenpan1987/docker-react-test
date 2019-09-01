@@ -1,0 +1,26 @@
+# docker run custom docker file: docker build -f Dockerfile.dev .
+
+FROM node:alpine
+
+WORKDIR "/app"
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "run", "start"]
+
+# -- live reloading with docker volumn --
+# when run docker, we can put addtional -v config to
+# the "docker run " command, this means we want to 
+# map something inside the container to our local
+# file system. For example: -v $(pwd):/app will map
+# everything inside the docker container /app directory
+# to our local file system. However, if we only do
+# -v /app/node_modules, the docker will just use the
+# files inside the container /app directory and ignore
+# the mapping
+
+# docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app jasenpan/react
